@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chamador de Senhas Premium</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#2563eb',
+                        secondary: '#1e40af',
+                        accent: '#dc2626',
+                        dark: '#1e293b',
+                        success: '#16a34a',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    animation: {
+                        'blink': 'blink 1s step-end infinite',
+                        'fade-in': 'fadeIn 0.3s ease-out',
+                        'fade-out': 'fadeOut 0.5s ease-in forwards',
+                        'slide-in': 'slideIn 0.3s ease-out',
+                    },
+                    keyframes: {
+                        blink: {
+                            'from, to': { opacity: '1' },
+                            '50%': { opacity: '0' },
+                        },
+                        fadeIn: {
+                            'from': { opacity: '0' },
+                            'to': { opacity: '1' },
+                        },
+                        fadeOut: {
+                            'to': { opacity: '0' },
+                        },
+                        slideIn: {
+                            'from': { transform: 'translateY(-20px)', opacity: '0' },
+                            'to': { transform: 'translateY(0)', opacity: '1' },
+                        },
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/css">
+        /* Garante que o cursor de input fique invisível */
+        .hidden-input {
+            position: absolute;
+            width: 0;
+            height: 0;
+            opacity: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body class="font-sans bg-gray-50 min-h-screen flex flex-col">
+    <!-- Input oculto para capturar teclado -->
+    <input type="text" id="hidden-input" class="hidden-input" autocomplete="off">
+    
+    <!-- Painel principal de exibição -->
+    <main class="flex-1 flex flex-col items-center justify-center p-4 md:p-8">
+        <div class="w-full max-w-4xl bg-white rounded-2xl shadow-xl overflow-hidden">
+            <!-- Cabeçalho -->
+            <div class="bg-primary py-4 px-6">
+                <h1 class="text-white text-xl md:text-2xl font-bold text-center">SISTEMA DE CHAMADA DE SENHAS</h1>
+            </div>
+            
+            <!-- Display da senha -->
+            <div class="p-6 md:p-12">
+                <div class="text-center mb-2">
+                    <span id="tipo-senha" class="text-gray-500 text-lg md:text-xl font-semibold">PRÓXIMA SENHA</span>
+                </div>
+                <div id="senha-atual" class="text-6xl md:text-8xl font-bold text-center py-8 md:py-12 text-gray-400">
+                    ---
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Painel de controle flutuante (oculto por padrão) -->
+    <div id="control-panel" class="fixed bottom-0 left-0 right-0 bg-white shadow-2xl rounded-t-3xl p-4 md:p-6 transform translate-y-full transition-transform duration-300">
+        <!-- Display do input -->
+        <div class="flex justify-center items-center mb-4 h-12 md:h-16">
+            <div id="senha-preview" class="text-2xl md:text-3xl font-mono font-bold flex items-center">
+                <span id="preview-tipo" class="text-primary"></span>
+                <span id="preview-numero" class="text-dark"></span>
+                <span id="cursor" class="w-1 h-8 md:h-10 bg-primary ml-1 animate-blink"></span>
+            </div>
+        </div>
+        
+        <!-- Teclado virtual -->
+        <div class="max-w-md mx-auto">
+            <!-- Linha de tipos -->
+            <div class="grid grid-cols-3 gap-2 mb-3">
+                <button onclick="adicionarTipo('P')" class="bg-primary hover:bg-secondary text-white font-bold py-2 md:py-3 px-2 md:px-4 rounded-lg transition-all text-sm md:text-base">
+                    P - Pedido
+                </button>
+                <button onclick="adicionarTipo('N')" class="bg-primary hover:bg-secondary text-white font-bold py-2 md:py-3 px-2 md:px-4 rounded-lg transition-all text-sm md:text-base">
+                    N - Normal
+                </button>
+                <button onclick="adicionarTipo('R')" class="bg-primary hover:bg-secondary text-white font-bold py-2 md:py-3 px-2 md:px-4 rounded-lg transition-all text-sm md:text-base">
+                    R - Retirada
+                </button>
+            </div>
+            
+            <!-- Teclado numérico -->
+            <div class="grid grid-cols-3 gap-2">
+                <button onclick="adicionarDigito('1')" class="bg-gray-100 hover:bg-gray-200 font-bold py-3 md:py-4 px-2 md:px-4 rounded-lg text-lg md:text-xl transition-all">
+                    1
+                </button>
+                <button onclick="adicionarDigito('2')" class="bg-gray-100 hover:bg-gray-200 font-bold py-3 md:py-4 px-2 md:px-4 rounded-lg text-lg md:text-xl transition-all">
+                    2
+                </button>
+                <button onclick="adicionarDigito('3')" class="bg-gray-100 hover:bg-gray-200 font-bold py-3 md:py-4 px-2 md:px-4 rounded-lg text-lg md:text-xl transition-all">
+                    3
+                </button>
+                <button onclick="adicionarDigito('4')" class="bg-gray-100 hover:bg-gray-200 font-bold py-3 md:py-4 px-2 md:px-4 rounded-lg text-lg md:text-xl transition-all">
+                    4
+                </button>
+                <button onclick="adicionarDigito('5')" class="bg-gray-100 hover:bg-gray-200 font-bold py-3 md:py-4 px-2 md:px-4 rounded-lg text-lg md:text-xl transition-all">
+                    5
+                </button>
+                <button onclick="adicionarDigito('6')" class="bg-gray-100 hover:bg-gray-200 font-bold py-3 md:py-4 px-2 md:px-4 rounded-lg text-lg md:text-xl transition-all">
+                    6
+                </button>
+                <button onclick="adicionarDigito('7')" class="bg-gray-100 hover:bg-gray-200 font-bold py-3 md:py-4 px-2 md:px-4 rounded-lg text-lg md:text-xl transition-all">
+                    7
+                </button>
+                <button onclick="adicionarDigito('8')" class="bg-gray-100 hover:bg-gray-200 font-bold py-3 md:py-4 px-2 md:px-4 rounded-lg text-lg md:text-xl transition-all">
+                    8
+                </button>
+                <button onclick="adicionarDigito('9')" class="bg-gray-100 hover:bg-gray-200 font-bold py-3 md:py-4 px-2 md:px-4 rounded-lg text-lg md:text-xl transition-all">
+                    9
+                </button>
+                <button onclick="limpar()" class="bg-gray-200 hover:bg-gray-300 font-bold py-3 md:py-4 px-2 md:px-4 rounded-lg text-lg md:text-xl transition-all">
+                    Limpar
+                </button>
+                <button onclick="adicionarDigito('0')" class="bg-gray-100 hover:bg-gray-200 font-bold py-3 md:py-4 px-2 md:px-4 rounded-lg text-lg md:text-xl transition-all">
+                    0
+                </button>
+                <button onclick="chamarSenha()" class="bg-accent hover:bg-red-600 text-white font-bold py-3 md:py-4 px-2 md:px-4 rounded-lg text-lg md:text-xl transition-all">
+                    Chamar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Botão para mostrar/ocultar painel de controle -->
+    <button id="toggle-panel" onclick="toggleControlPanel()" class="fixed bottom-4 right-4 bg-primary text-white p-3 rounded-full shadow-lg z-50 hover:bg-secondary transition-all">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+        </svg>
+    </button>
+
+    <!-- Feedback flutuante -->
+    <div id="feedback" class="fixed top-4 left-1/2 transform -translate-x-1/2 px-6 py-3 rounded-lg shadow-lg font-semibold opacity-0 transition-opacity duration-300"></div>
+
+    <script>
+        // Estado da aplicação
+        let senhaAtual = '';
+        const hiddenInput = document.getElementById('hidden-input');
+        const displaySenhaAtual = document.getElementById('senha-atual');
+        const displayTipoSenha = document.getElementById('tipo-senha');
+        const previewTipo = document.getElementById('preview-tipo');
+        const previewNumero = document.getElementById('preview-numero');
+        const cursor = document.getElementById('cursor');
+        const feedback = document.getElementById('feedback');
+        const controlPanel = document.getElementById('control-panel');
+        const togglePanelBtn = document.getElementById('toggle-panel');
+
+        // Configuração inicial
+        document.addEventListener('DOMContentLoaded', () => {
+            // Foca no input oculto
+            hiddenInput.focus();
+            
+            // Configura listeners de teclado
+            document.addEventListener('keydown', handleKeyDown);
+            
+            // Mostra cursor inicialmente
+            cursor.classList.remove('opacity-0');
+        });
+
+        // Manipulador de teclado
+        function handleKeyDown(e) {
+            // Mostra cursor
+            cursor.classList.remove('opacity-0');
+            
+            // Teclas numéricas
+            if (e.key >= '0' && e.key <= '9') {
+                adicionarDigito(e.key);
+            }
+            
+            // Teclas de tipo
+            if (['p', 'n', 'r'].includes(e.key.toLowerCase())) {
+                adicionarTipo(e.key.toUpperCase());
+            }
+            
+            // Backspace
+            if (e.key === 'Backspace') {
+                senhaAtual = senhaAtual.slice(0, -1);
+                atualizarPreview();
+            }
+            
+            // Enter
+            if (e.key === 'Enter') {
+                chamarSenha();
+            }
+            
+            // Escape
+            if (e.key === 'Escape') {
+                limpar();
+            }
+            
+            // Barra de espaço (alterna painel de controle)
+            if (e.key === ' ') {
+                toggleControlPanel();
+                e.preventDefault();
+            }
+        }
+
+        // Alterna visibilidade do painel de controle
+        function toggleControlPanel() {
+            const isVisible = controlPanel.classList.contains('translate-y-0');
+            
+            if (isVisible) {
+                controlPanel.classList.remove('translate-y-0');
+                controlPanel.classList.add('translate-y-full');
+                togglePanelBtn.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                `;
+            } else {
+                controlPanel.classList.remove('translate-y-full');
+                controlPanel.classList.add('translate-y-0');
+                togglePanelBtn.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+                    </svg>
+                `;
+            }
+            
+            // Mantém o foco no input oculto
+            hiddenInput.focus();
+        }
+
+        // Funções de controle
+        function adicionarTipo(tipo) {
+            if (/^[PNR]/.test(senhaAtual)) {
+                senhaAtual = tipo + senhaAtual.slice(1);
+            } else {
+                senhaAtual = tipo + senhaAtual;
+            }
+            atualizarPreview();
+        }
+
+        function adicionarDigito(digito) {
+            if (/[PNR]\d{4}$/.test(senhaAtual)) return;
+            senhaAtual += digito;
+            atualizarPreview();
+        }
+
+        function limpar() {
+            senhaAtual = '';
+            atualizarPreview();
+            cursor.classList.remove('opacity-0');
+            hiddenInput.focus();
+        }
+
+        function atualizarPreview() {
+            if (/^[PNR]/.test(senhaAtual)) {
+                const tipo = senhaAtual.charAt(0);
+                const numeros = senhaAtual.slice(1);
+                previewTipo.textContent = tipo;
+                previewNumero.textContent = numeros;
+            } else {
+                previewTipo.textContent = '';
+                previewNumero.textContent = senhaAtual;
+            }
+            
+            // Mostra cursor
+            cursor.classList.remove('opacity-0');
+        }
+
+        function chamarSenha() {
+            // Validação
+            if (!/^[PNR]\d{1,4}$/.test(senhaAtual)) {
+                mostrarFeedback('Formato inválido! Use P/N/R + números', false);
+                return;
+            }
+
+            const tipo = senhaAtual.charAt(0);
+            const numero = senhaAtual.slice(1);
+
+            // Atualiza display
+            displaySenhaAtual.textContent = senhaAtual;
+            displaySenhaAtual.classList.remove('text-gray-400');
+            displaySenhaAtual.classList.add('text-accent');
+
+            // Atualiza tipo
+            const tipoTexto = {
+                'P': 'PEDIDO',
+                'N': 'NORMAL',
+                'R': 'RETIRADA'
+            }[tipo] || 'INDEFINIDO';
+
+            displayTipoSenha.textContent = tipoTexto;
+            displayTipoSenha.className = 'text-lg md:text-xl font-semibold ' + ({
+                'P': 'text-red-500',
+                'N': 'text-primary',
+                'R': 'text-green-500'
+            }[tipo] || 'text-gray-500');
+
+            // Feedback
+            mostrarFeedback(`Senha ${senhaAtual} chamada com sucesso!`, true);
+
+            // Limpa para próxima senha
+            setTimeout(() => {
+                limpar();
+            }, 1500);
+        }
+
+        function mostrarFeedback(mensagem, sucesso) {
+            feedback.textContent = mensagem;
+            feedback.className = `fixed top-4 left-1/2 transform -translate-x-1/2 px-6 py-3 rounded-lg shadow-lg font-semibold opacity-0 transition-opacity duration-300 ${sucesso ? 'bg-green-500' : 'bg-red-500'} text-white`;
+            
+            // Mostra e depois esconde
+            setTimeout(() => {
+                feedback.classList.remove('opacity-0');
+                setTimeout(() => {
+                    feedback.classList.add('opacity-0');
+                }, 2500);
+            }, 10);
+        }
+    </script>
+</body>
+</html>
