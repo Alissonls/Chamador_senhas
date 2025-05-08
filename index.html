@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Chamador de Senhas Premium</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
     <script>
         tailwind.config = {
             theme: {
@@ -56,11 +56,21 @@
             opacity: 0;
             overflow: hidden;
         }
+        /* Estilização para o histórico horizontal */
+        #historico-senhas {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: nowrap;
+            padding: 0;
+            margin-top: 1rem;
+            list-style: none;
+        }
     </style>
 </head>
 <body class="font-sans bg-gray-50 min-h-screen flex flex-col">
     <!-- Input oculto para capturar teclado -->
-    <input type="text" id="hidden-input" class="hidden-input" autocomplete="off">
+    <input type="text" id="hidden-input" class="hidden-input" autocomplete="off" />
     
     <!-- Painel principal de exibição -->
     <main class="flex-1 flex flex-col items-center justify-center p-4 md:p-8">
@@ -78,6 +88,14 @@
                 <div id="senha-atual" class="text-6xl md:text-8xl font-bold text-center py-8 md:py-12 text-gray-400">
                     ---
                 </div>
+            </div>
+
+            <!-- Últimas senhas chamadas -->
+            <div class="p-6 md:p-12">
+                <h2 class="text-lg md:text-xl font-semibold text-center">Últimas Senhas Chamadas</h2>
+                <ul id="historico-senhas">
+                    <li class="text-gray-500 text-xl font-semibold">Nenhuma senha chamada ainda.</li>
+                </ul>
             </div>
         </div>
     </main>
@@ -163,6 +181,7 @@
     <script>
         // Estado da aplicação
         let senhaAtual = '';
+        const ultimasSenhas = [];
         const hiddenInput = document.getElementById('hidden-input');
         const displaySenhaAtual = document.getElementById('senha-atual');
         const displayTipoSenha = document.getElementById('tipo-senha');
@@ -172,6 +191,39 @@
         const feedback = document.getElementById('feedback');
         const controlPanel = document.getElementById('control-panel');
         const togglePanelBtn = document.getElementById('toggle-panel');
+        const historicoSenhas = document.getElementById('historico-senhas');
+
+        // Cria contexto audio para o som de chamada
+        let audioCtx;
+        function playChamadaSound() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+
+            // Cria os osciladores para sonoridade mais rica
+            const osc1 = audioCtx.createOscillator();
+            const osc2 = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+
+            osc1.type = 'sine';
+            osc1.frequency.setValueAtTime(800, audioCtx.currentTime); // frequência 800 Hz
+            osc2.type = 'triangle';
+            osc2.frequency.setValueAtTime(1200, audioCtx.currentTime); // frequência 1200 Hz
+
+            osc1.connect(gainNode);
+            osc2.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+
+            gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
+            gainNode.gain.linearRampToValueAtTime(0.2, audioCtx.currentTime + 0.01); // fade in rápido
+            gainNode.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.3); // fade out rápido
+
+            osc1.start(audioCtx.currentTime);
+            osc2.start(audioCtx.currentTime);
+
+            osc1.stop(audioCtx.currentTime + 0.3);
+            osc2.stop(audioCtx.currentTime + 0.3);
+        }
 
         // Configuração inicial
         document.addEventListener('DOMContentLoaded', () => {
@@ -193,33 +245,44 @@
             // Teclas numéricas
             if (e.key >= '0' && e.key <= '9') {
                 adicionarDigito(e.key);
+                e.preventDefault();
+                return;
             }
             
             // Teclas de tipo
             if (['p', 'n', 'r'].includes(e.key.toLowerCase())) {
                 adicionarTipo(e.key.toUpperCase());
+                e.preventDefault();
+                return;
             }
             
             // Backspace
             if (e.key === 'Backspace') {
                 senhaAtual = senhaAtual.slice(0, -1);
                 atualizarPreview();
+                e.preventDefault();
+                return;
             }
             
             // Enter
             if (e.key === 'Enter') {
                 chamarSenha();
+                e.preventDefault();
+                return;
             }
             
             // Escape
             if (e.key === 'Escape') {
                 limpar();
+                e.preventDefault();
+                return;
             }
             
             // Barra de espaço (alterna painel de controle)
             if (e.key === ' ') {
                 toggleControlPanel();
                 e.preventDefault();
+                return;
             }
         }
 
@@ -260,7 +323,8 @@
         }
 
         function adicionarDigito(digito) {
-            if (/[PNR]\d{4}$/.test(senhaAtual)) return;
+            if (senhaAtual.length === 0) return; // impede adicionar dígito antes do tipo
+            if (/^[PNR]\d{4}$/.test(senhaAtual)) return; // máximo 4 dígitos
             senhaAtual += digito;
             atualizarPreview();
         }
@@ -288,48 +352,70 @@
         }
 
         function chamarSenha() {
-            // Validação
             if (!/^[PNR]\d{1,4}$/.test(senhaAtual)) {
                 mostrarFeedback('Formato inválido! Use P/N/R + números', false);
                 return;
             }
+            playChamadaSound();
 
             const tipo = senhaAtual.charAt(0);
             const numero = senhaAtual.slice(1);
 
-            // Atualiza display
             displaySenhaAtual.textContent = senhaAtual;
             displaySenhaAtual.classList.remove('text-gray-400');
             displaySenhaAtual.classList.add('text-accent');
 
-            // Atualiza tipo
-            const tipoTexto = {
-                'P': 'PEDIDO',
-                'N': 'NORMAL',
-                'R': 'RETIRADA'
-            }[tipo] || 'INDEFINIDO';
-
+            const tipoTexto = { P: 'PEDIDO', N: 'NORMAL', R: 'RETIRADA' }[tipo] || 'INDEFINIDO';
             displayTipoSenha.textContent = tipoTexto;
             displayTipoSenha.className = 'text-lg md:text-xl font-semibold ' + ({
-                'P': 'text-red-500',
-                'N': 'text-primary',
-                'R': 'text-green-500'
+                P: 'text-red-500',
+                N: 'text-primary',
+                R: 'text-green-500',
             }[tipo] || 'text-gray-500');
 
-            // Feedback
+            adicionarNoHistorico(senhaAtual);
+
             mostrarFeedback(`Senha ${senhaAtual} chamada com sucesso!`, true);
 
-            // Limpa para próxima senha
             setTimeout(() => {
                 limpar();
             }, 1500);
         }
 
+        function adicionarNoHistorico(senha) {
+            if (ultimasSenhas.length === 0) {
+                historicoSenhas.innerHTML = '';
+            }
+            // Evita duplicar a última senha chamada
+            if (ultimasSenhas[0] !== senha) {
+                ultimasSenhas.unshift(senha);
+            }
+            if (ultimasSenhas.length > 3) {
+                ultimasSenhas.pop();
+            }
+            atualizarHistoricoVisual();
+        }
+
+        function atualizarHistoricoVisual() {
+            historicoSenhas.innerHTML = '';
+            if (ultimasSenhas.length === 0) {
+                const li = document.createElement('li');
+                li.textContent = 'Nenhuma senha chamada ainda.';
+                li.className = 'text-gray-500 text-xl font-semibold';
+                historicoSenhas.appendChild(li);
+                return;
+            }
+            ultimasSenhas.forEach((senha) => {
+                const li = document.createElement('li');
+                li.textContent = senha;
+                li.className = 'text-4xl font-bold text-gray-700 select-none';
+                historicoSenhas.appendChild(li);
+            });
+        }
+
         function mostrarFeedback(mensagem, sucesso) {
             feedback.textContent = mensagem;
             feedback.className = `fixed top-4 left-1/2 transform -translate-x-1/2 px-6 py-3 rounded-lg shadow-lg font-semibold opacity-0 transition-opacity duration-300 ${sucesso ? 'bg-green-500' : 'bg-red-500'} text-white`;
-            
-            // Mostra e depois esconde
             setTimeout(() => {
                 feedback.classList.remove('opacity-0');
                 setTimeout(() => {
