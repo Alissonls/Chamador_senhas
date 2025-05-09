@@ -16,7 +16,7 @@
                         accent: '#dc2626',
                         dark: '#1e293b',
                         success: '#16a34a',
-                    },
+                    }, 
                     fontFamily: {
                         sans: ['Inter', 'sans-serif'],
                     },
@@ -48,6 +48,12 @@
         }
     </script>
     <style type="text/css">
+        body {
+            background-image: url('img/funco_ondas.png'); /* Substitua pelo caminho da sua imagem */
+            background-size: cover; /* Faz a imagem cobrir todo o fundo */
+            background-position: center; /* Centraliza a imagem */
+            background-repeat: no-repeat; /* Não repete a imagem */
+        }
         /* Garante que o cursor de input fique invisível */
         .hidden-input {
             position: absolute;
@@ -81,18 +87,20 @@
     
     <!-- Painel principal de exibição -->
     <main class="flex-1 flex flex-col items-center justify-center p-4 md:p-8">
-        <div class="w-full max-w-4xl bg-white rounded-2xl shadow-xl overflow-hidden">
+        <div class="w-full max-w-5xl bg-white bg-opacity-5 backdrop-blur-md rounded-2xl shadow-xl overflow-hidden">
+
             <!-- Cabeçalho -->
-            <div class="bg-primary py-4 px-6">
-                <h1 class="text-white text-xl md:text-2xl font-bold text-center">SISTEMA DE CHAMADA DE SENHAS</h1>
-            </div>
+            <div class="bg-primary bg-opacity-5 py-4 px-6">
+    <h1 class="text-white text-xl md:text-2xl font-bold text-center">Sistema de Chamda de Senhas</h1>
+</div>
+
             
             <!-- Display da senha -->
             <div class="p-6 md:p-12">
                 <div class="text-center mb-2">
-                    <span id="tipo-senha" class="text-gray-500 text-lg md:text-xl font-semibold">PRÓXIMA SENHA</span>
+                    <span id="tipo-senha" class="text-white-500  text-lg md:text-3  xl font-semibold">PRÓXIMA SENHA</span>
                 </div>
-                <div id="senha-atual" class="text-6xl md:text-8xl font-bold text-center py-8 md:py-12 text-gray-400">
+                <div id="senha-atual" class="text-12xl md:text-9xl font-bold text-center py-8 md:py-12 text-gray-400">
                     ---
                 </div>
             </div>
