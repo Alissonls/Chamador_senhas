@@ -2,22 +2,6 @@
 
 Um sistema simples e personalizável para gerenciar fila de atendimento por senhas. Ideal para clínicas, escritórios, repartições públicas, bancos e qualquer outro estabelecimento que precise organizar o fluxo de clientes.
 
----
-
-## 📋 Sumário
-
-- [Descrição](#descrição)  
-- [Funcionalidades](#funcionalidades)  
-- [Tecnologias](#tecnologias)  
-- [Pré-requisitos](#pré-requisitos)  
-- [Instalação](#instalação)  
-- [Configuração](#configuração)  
-- [Uso](#uso)  
-- [Contribuição](#contribuição)  
-- [Licença](#licença)  
-
----
-
 ## 📝 Descrição
 
 O **Chamador de Senhas** permite:
@@ -56,23 +40,6 @@ O **Chamador de Senhas** permite:
 
 - **Frontend**: HTML5, CSS3, JavaScript (Vue.js ou React)  
 - **Backend**: Node.js (Express) ou Python (Flask/Django)  
-- **Banco de Dados**: SQLite, PostgreSQL ou MongoDB  
-- **Síntese de Voz**: Web Speech API ou serviços de TTS (Google, AWS, Azure)  
 - **Empacotamento**: Docker (opcional)  
 
----
 
-## 🚀 Pré-requisitos
-
-- [Node.js](https://nodejs.org/) ≥ 14.x **ou** [Python](https://www.python.org/) ≥ 3.8  
-- [Git](https://git-scm.com/)  
-- [Docker](https://www.docker.com/) (opcional)  
-
----
-
-## 📥 Instalação
-
-1. **Clone o repositório**  
-   ```bash
-   git clone https://github.com/seu-usuario/chamador-de-senhas.git
-   cd chamador-de-senhas
