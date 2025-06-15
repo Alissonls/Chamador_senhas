@@ -49,12 +49,11 @@
     </script>
     <style type="text/css">
         body {
-            background-image: url('img/funco_ondas.png'); /* Substitua pelo caminho da sua imagem */
-            background-size: cover; /* Faz a imagem cobrir todo o fundo */
-            background-position: center; /* Centraliza a imagem */
-            background-repeat: no-repeat; /* Não repete a imagem */
+            background-image: url('img/funco_ondas.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
         }
-        /* Garante que o cursor de input fique invisível */
         .hidden-input {
             position: absolute;
             width: 0;
@@ -62,7 +61,6 @@
             opacity: 0;
             overflow: hidden;
         }
-        /* Estilização para o histórico horizontal */
         #historico-senhas {
             display: flex;
             justify-content: center;
@@ -75,60 +73,46 @@
     </style>
 </head>
 <body class="font-sans bg-gray-50 min-h-screen flex flex-col">
-    <!-- Input oculto para capturar teclado -->
     <input type="text" id="hidden-input" class="hidden-input" autocomplete="off" />
     
-   
-        <!-- Header -->
     <header class="flex justify-center p-4">
-    <img src="img/logo1s.jpg" alt="Logo SESC" class="h-16 w-auto" style="height: 100px;" />
-</header>
+        <img src="img/logo sesc branco.png" alt="Logo SESC" class="h-16 w-auto" style="height: 100px;" />
+    </header>
 
-    
-    <!-- Painel principal de exibição -->
     <main class="flex-1 flex flex-col items-center justify-center p-4 md:p-8">
         <div class="w-full max-w-5xl bg-white bg-opacity-5 backdrop-blur-md rounded-2xl shadow-xl overflow-hidden">
-
-            <!-- Cabeçalho -->
             <div class="bg-primary bg-opacity-5 py-4 px-6">
-    <h1 class="text-white text-xl md:text-2xl font-bold text-center">Sistema de Chamda de Senhas</h1>
-</div>
-
+                <h1 class="text-white text-xl md:text-2xl font-bold text-center">COMEDORIA SESC VILA MARIANA</h1>
+            </div>
             
-            <!-- Display da senha -->
             <div class="p-6 md:p-12">
                 <div class="text-center mb-2">
-                    <span id="tipo-senha" class="text-white-500  text-lg md:text-3  xl font-semibold">PRÓXIMA SENHA</span>
+                    <span id="tipo-senha" class="text-white text-lg md:text-2xl font-semibold">PRÓXIMA SENHA</span>
                 </div>
-                <div id="senha-atual" class="text-12xl md:text-9xl font-bold text-center py-8 md:py-12 text-gray-400">
+                <div id="senha-atual" class="text-12xl md:text-9xl font-bold text-center py-8 md:py-12 text-white">
                     ---
                 </div>
             </div>
 
-            <!-- Últimas senhas chamadas -->
             <div class="p-6 md:p-12">
-                <h2 class="text-lg md:text-xl font-semibold text-center">Últimas Senhas Chamadas</h2>
+                <h2 class="text-white text-lg md:text-xl font-semibold text-center">Últimas Senhas Chamadas</h2>
                 <ul id="historico-senhas">
-                    <li class="text-gray-500 text-xl font-semibold">Nenhuma senha chamada ainda.</li>
+                    <li class="text-white text-xl font-semibold">Nenhuma senha chamada ainda.</li>
                 </ul>
             </div>
         </div>
     </main>
 
-    <!-- Painel de controle flutuante (oculto por padrão) -->
     <div id="control-panel" class="fixed bottom-0 left-0 right-0 bg-white shadow-2xl rounded-t-3xl p-4 md:p-6 transform translate-y-full transition-transform duration-300">
-        <!-- Display do input -->
         <div class="flex justify-center items-center mb-4 h-12 md:h-16">
             <div id="senha-preview" class="text-2xl md:text-3xl font-mono font-bold flex items-center">
-                <span id="preview-tipo" class="text-primary"></span>
-                <span id="preview-numero" class="text-dark"></span>
-                <span id="cursor" class="w-1 h-8 md:h-10 bg-primary ml-1 animate-blink"></span>
+                <span id="preview-tipo" class="text-white"></span>
+                <span id="preview-numero" class="text-white"></span>
+                <span id="cursor" class="w-1 h-8 md:h-10 bg-white ml-1 animate-blink"></span>
             </div>
         </div>
         
-        <!-- Teclado virtual -->
         <div class="max-w-md mx-auto">
-            <!-- Linha de tipos -->
             <div class="grid grid-cols-3 gap-2 mb-3">
                 <button onclick="adicionarTipo('P')" class="bg-primary hover:bg-secondary text-white font-bold py-2 md:py-3 px-2 md:px-4 rounded-lg transition-all text-sm md:text-base">
                     P - Pedido
@@ -141,7 +125,6 @@
                 </button>
             </div>
             
-            <!-- Teclado numérico -->
             <div class="grid grid-cols-3 gap-2">
                 <button onclick="adicionarDigito('1')" class="bg-gray-100 hover:bg-gray-200 font-bold py-3 md:py-4 px-2 md:px-4 rounded-lg text-lg md:text-xl transition-all">
                     1
@@ -183,52 +166,51 @@
         </div>
     </div>
 
-    <!-- Botão para mostrar/ocultar painel de controle -->
     <button id="toggle-panel" onclick="toggleControlPanel()" class="fixed bottom-4 right-4 bg-primary text-white p-3 rounded-full shadow-lg z-50 hover:bg-secondary transition-all">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
         </svg>
     </button>
 
-    <!-- Feedback flutuante -->
-    <div id="feedback" class="fixed top-4 left-1/2 transform -translate-x-1/2 px-6 py-3 rounded-lg shadow-lg font-semibold opacity-0 transition-opacity duration-300"></div>
-
     <script>
-    let senhaAtual = '';
-    const ultimasSenhas = [];
-    const hiddenInput = document.getElementById('hidden-input');
-    const displaySenhaAtual = document.getElementById('senha-atual');
-    const displayTipoSenha = document.getElementById('tipo-senha');
-    const previewTipo = document.getElementById('preview-tipo');
-    const previewNumero = document.getElementById('preview-numero');
-    const cursor = document.getElementById('cursor');
-    const feedback = document.getElementById('feedback');
-    const controlPanel = document.getElementById('control-panel');
-    const togglePanelBtn = document.getElementById('toggle-panel');
-    const historicoSenhas = document.getElementById('historico-senhas');
+        // Estado da aplicação
+        let senhaAtual = '';
+        const ultimasSenhas = [];
+        const hiddenInput = document.getElementById('hidden-input');
+        const displaySenhaAtual = document.getElementById('senha-atual');
+        const displayTipoSenha = document.getElementById('tipo-senha');
+        const previewTipo = document.getElementById('preview-tipo');
+        const previewNumero = document.getElementById('preview-numero');
+        const cursor = document.getElementById('cursor');
+        const feedback = document.getElementById('feedback');
+        const controlPanel = document.getElementById('control-panel');
+        const togglePanelBtn = document.getElementById('toggle-panel');
+        const historicoSenhas = document.getElementById('historico-senhas');
 
-    let audioCtx;
-    function playChamadaSound() {
-        if (!audioCtx) {
-            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        }
+        // Cria contexto audio para o som de chamada
+        let audioCtx;
+        function playChamadaSound() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
 
-        const osc1 = audioCtx.createOscillator();
-        const osc2 = audioCtx.createOscillator();
-        const gainNode = audioCtx.createGain();
+            // Cria os osciladores para sonoridade mais rica
+            const osc1 = audioCtx.createOscillator();
+            const osc2 = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
 
-        osc1.type = 'sine';
-        osc1.frequency.setValueAtTime(800, audioCtx.currentTime);
-        osc2.type = 'triangle';
-        osc2.frequency.setValueAtTime(1200, audioCtx.currentTime);
+            osc1.type = 'sine';
+            osc1.frequency.setValueAtTime(800, audioCtx.currentTime); // frequência 800 Hz
+            osc2.type = 'triangle';
+            osc2.frequency.setValueAtTime(1200, audioCtx.currentTime); // frequência 1200 Hz
 
         osc1.connect(gainNode);
         osc2.connect(gainNode);
         gainNode.connect(audioCtx.destination);
 
-        gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
-        gainNode.gain.linearRampToValueAtTime(0.2, audioCtx.currentTime + 0.01);
-        gainNode.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.3);
+            gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
+            gainNode.gain.linearRampToValueAtTime(0.2, audioCtx.currentTime + 0.01); // fade in rápido
+            gainNode.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.3); // fade out rápido
 
         osc1.start(audioCtx.currentTime);
         osc2.start(audioCtx.currentTime);
@@ -237,76 +219,109 @@
         osc2.stop(audioCtx.currentTime + 0.3);
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
-        hiddenInput.focus();
-        document.addEventListener('keydown', handleKeyDown);
-        cursor.classList.remove('opacity-0');
-    });
+        // Configuração inicial
+        document.addEventListener('DOMContentLoaded', () => {
+            // Foca no input oculto
+            hiddenInput.focus();
+            
+            // Configura listeners de teclado
+            document.addEventListener('keydown', handleKeyDown);
+            
+            // Mostra cursor inicialmente
+            cursor.classList.remove('opacity-0');
+        });
 
-    function handleKeyDown(e) {
-        cursor.classList.remove('opacity-0');
-
-        if (e.key >= '0' && e.key <= '9') {
-            adicionarDigito(e.key);
-            e.preventDefault();
-            return;
+        // Manipulador de teclado
+        function handleKeyDown(e) {
+            // Mostra cursor
+            cursor.classList.remove('opacity-0');
+            
+            // Teclas numéricas
+            if (e.key >= '0' && e.key <= '9') {
+                adicionarDigito(e.key);
+                e.preventDefault();
+                return;
+            }
+            
+            // Teclas de tipo
+            if (['p', 'n', 'r'].includes(e.key.toLowerCase())) {
+                adicionarTipo(e.key.toUpperCase());
+                e.preventDefault();
+                return;
+            }
+            
+            // Backspace
+            if (e.key === 'Backspace') {
+                senhaAtual = senhaAtual.slice(0, -1);
+                atualizarPreview();
+                e.preventDefault();
+                return;
+            }
+            
+            // Enter
+            if (e.key === 'Enter') {
+                chamarSenha();
+                e.preventDefault();
+                return;
+            }
+            
+            // Escape
+            if (e.key === 'Escape') {
+                limpar();
+                e.preventDefault();
+                return;
+            }
+            
+            // Barra de espaço (alterna painel de controle)
+            if (e.key === ' ') {
+                toggleControlPanel();
+                e.preventDefault();
+                return;
+            }
         }
 
-        if (e.key === 'Backspace') {
-            senhaAtual = senhaAtual.slice(0, -1);
+        // Alterna visibilidade do painel de controle
+        function toggleControlPanel() {
+            const isVisible = controlPanel.classList.contains('translate-y-0');
+            
+            if (isVisible) {
+                controlPanel.classList.remove('translate-y-0');
+                controlPanel.classList.add('translate-y-full');
+                togglePanelBtn.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                `;
+            } else {
+                controlPanel.classList.remove('translate-y-full');
+                controlPanel.classList.add('translate-y-0');
+                togglePanelBtn.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+                    </svg>
+                `;
+            }
+            
+            // Mantém o foco no input oculto
+            hiddenInput.focus();
+        }
+
+        // Funções de controle
+        function adicionarTipo(tipo) {
+            if (/^[PNR]/.test(senhaAtual)) {
+                senhaAtual = tipo + senhaAtual.slice(1);
+            } else {
+                senhaAtual = tipo + senhaAtual;
+            }
             atualizarPreview();
-            e.preventDefault();
-            return;
         }
 
-        if (e.key === 'Enter') {
-            chamarSenha();
-            e.preventDefault();
-            return;
+        function adicionarDigito(digito) {
+            if (senhaAtual.length === 0) return; // impede adicionar dígito antes do tipo
+            if (/^[PNR]\d{4}$/.test(senhaAtual)) return; // máximo 4 dígitos
+            senhaAtual += digito;
+            atualizarPreview();
         }
-
-        if (e.key === 'Escape') {
-            limpar();
-            e.preventDefault();
-            return;
-        }
-
-        if (e.key === ' ') {
-            toggleControlPanel();
-            e.preventDefault();
-            return;
-        }
-    }
-
-    function toggleControlPanel() {
-        const isVisible = controlPanel.classList.contains('translate-y-0');
-
-        if (isVisible) {
-            controlPanel.classList.remove('translate-y-0');
-            controlPanel.classList.add('translate-y-full');
-            togglePanelBtn.innerHTML = `
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                </svg>
-            `;
-        } else {
-            controlPanel.classList.remove('translate-y-full');
-            controlPanel.classList.add('translate-y-0');
-            togglePanelBtn.innerHTML = `
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
-                </svg>
-            `;
-        }
-
-        hiddenInput.focus();
-    }
-
-    function adicionarDigito(digito) {
-        if (senhaAtual.length >= 4) return;
-        senhaAtual += digito;
-        atualizarPreview();
-    }
 
     function limpar() {
         senhaAtual = '';
@@ -315,78 +330,93 @@
         hiddenInput.focus();
     }
 
-    function atualizarPreview() {
-        previewTipo.textContent = 'PEDIDO';
-        previewNumero.textContent = senhaAtual;
-        cursor.classList.remove('opacity-0');
-    }
-
-    function chamarSenha() {
-        if (!/^\d{1,4}$/.test(senhaAtual)) {
-            mostrarFeedback('Digite apenas números (máx. 4 dígitos)', false);
-            return;
+        function atualizarPreview() {
+            if (/^[PNR]/.test(senhaAtual)) {
+                const tipo = senhaAtual.charAt(0);
+                const numeros = senhaAtual.slice(1);
+                previewTipo.textContent = tipo;
+                previewNumero.textContent = numeros;
+            } else {
+                previewTipo.textContent = '';
+                previewNumero.textContent = senhaAtual;
+            }
+            
+            // Mostra cursor
+            cursor.classList.remove('opacity-0');
         }
 
-        playChamadaSound();
+        function chamarSenha() {
+            if (!/^[PNR]\d{1,4}$/.test(senhaAtual)) {
+                mostrarFeedback('Formato inválido! Use P/N/R + números', false);
+                return;
+            }
+            playChamadaSound();
 
-        displaySenhaAtual.textContent = senhaAtual;
-        displaySenhaAtual.classList.remove('text-gray-400');
-        displaySenhaAtual.classList.add('text-accent');
+            const tipo = senhaAtual.charAt(0);
+            const numero = senhaAtual.slice(1);
 
-        displayTipoSenha.textContent = 'PEDIDO';
-        displayTipoSenha.className = 'text-lg md:text-xl font-semibold text-red-500';
+            displaySenhaAtual.textContent = senhaAtual;
+            displaySenhaAtual.classList.remove('text-gray-400');
+            displaySenhaAtual.classList.add('text-accent');
 
-        adicionarNoHistorico(senhaAtual);
+            const tipoTexto = { P: 'PEDIDO', N: 'NORMAL', R: 'RETIRADA' }[tipo] || 'INDEFINIDO';
+            displayTipoSenha.textContent = tipoTexto;
+            displayTipoSenha.className = 'text-lg md:text-xl font-semibold ' + ({
+                P: 'text-red-500',
+                N: 'text-primary',
+                R: 'text-green-500',
+            }[tipo] || 'text-gray-500');
 
-        mostrarFeedback(`Senha ${senhaAtual} chamada com sucesso!`, true);
+            adicionarNoHistorico(senhaAtual);
+
+            mostrarFeedback(`Senha ${senhaAtual} chamada com sucesso!`, true);
 
         setTimeout(() => {
             limpar();
         }, 1500);
     }
 
-    function adicionarNoHistorico(senha) {
-        if (ultimasSenhas.length === 0) {
+        function adicionarNoHistorico(senha) {
+            if (ultimasSenhas.length === 0) {
+                historicoSenhas.innerHTML = '';
+            }
+            // Evita duplicar a última senha chamada
+            if (ultimasSenhas[0] !== senha) {
+                ultimasSenhas.unshift(senha);
+            }
+            if (ultimasSenhas.length > 3) {
+                ultimasSenhas.pop();
+            }
+            atualizarHistoricoVisual();
+        }
+
+        function atualizarHistoricoVisual() {
             historicoSenhas.innerHTML = '';
+            if (ultimasSenhas.length === 0) {
+                const li = document.createElement('li');
+                li.textContent = 'Nenhuma senha chamada ainda.';
+                li.className = 'text-gray-500 text-xl font-semibold';
+                historicoSenhas.appendChild(li);
+                return;
+            }
+            ultimasSenhas.forEach((senha) => {
+                const li = document.createElement('li');
+                li.textContent = senha;
+                li.className = 'text-4xl font-bold text-gray-700 select-none';
+                historicoSenhas.appendChild(li);
+            });
         }
-        if (ultimasSenhas[0] !== senha) {
-            ultimasSenhas.unshift(senha);
-        }
-        if (ultimasSenhas.length > 3) {
-            ultimasSenhas.pop();
-        }
-        atualizarHistoricoVisual();
-    }
 
-    function atualizarHistoricoVisual() {
-        historicoSenhas.innerHTML = '';
-        if (ultimasSenhas.length === 0) {
-            const li = document.createElement('li');
-            li.textContent = 'Nenhuma senha chamada ainda.';
-            li.className = 'text-gray-500 text-xl font-semibold';
-            historicoSenhas.appendChild(li);
-            return;
-        }
-        ultimasSenhas.forEach((senha) => {
-            const li = document.createElement('li');
-            li.textContent = senha;
-            li.className = 'text-4xl font-bold text-gray-700 select-none';
-            historicoSenhas.appendChild(li);
-        });
-    }
-
-    function mostrarFeedback(mensagem, sucesso) {
-        feedback.textContent = mensagem;
-        feedback.className = `fixed top-4 left-1/2 transform -translate-x-1/2 px-6 py-3 rounded-lg shadow-lg font-semibold opacity-0 transition-opacity duration-300 ${sucesso ? 'bg-green-500' : 'bg-red-500'} text-white`;
-        setTimeout(() => {
-            feedback.classList.remove('opacity-0');
+        function mostrarFeedback(mensagem, sucesso) {
+            feedback.textContent = mensagem;
+            feedback.className = `fixed top-4 left-1/2 transform -translate-x-1/2 px-6 py-3 rounded-lg shadow-lg font-semibold opacity-0 transition-opacity duration-300 ${sucesso ? 'bg-green-500' : 'bg-red-500'} text-white`;
             setTimeout(() => {
-                feedback.classList.add('opacity-0');
-            }, 2500);
-        }, 10);
-    }
-</script>
-
-        
+                feedback.classList.remove('opacity-0');
+                setTimeout(() => {
+                    feedback.classList.add('opacity-0');
+                }, 2500);
+            }, 10);
+        }
+    </script>
 </body>
 </html>
