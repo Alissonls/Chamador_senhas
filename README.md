@@ -1,6 +1,6 @@
 # Chamador de Senhas
 
-Um sistema simples e personalizável para gerenciar fila de atendimento por senhas. Ideal para clínicas, escritórios, repartições públicas, bancos e qualquer outro estabelecimento que precise organizar o fluxo de clientes.
+Um sistema simples e personalizável para gerenciar fila de atendimento por senhas. 
 
 ## 📝 Descrição
 
@@ -11,7 +11,7 @@ O **Chamador de Senhas** permite:
 - Registrar histórico de senhas atendidas.  
 - Personalizar layouts, sons e intervalos de chamada.  
 
-É fácil de instalar, configurar e usar — ideal para quem quer organizar o atendimento sem complicação.
+
 
 ---
 
@@ -31,15 +31,11 @@ O **Chamador de Senhas** permite:
 5. **Personalização**  
    - Temas de cores e fontes.  
    - Sons e mensagens configuráveis.  
-6. **Multilinguagem**  
-   - Suporte a português, inglês e outros idiomas.  
 
 ---
 
 ## 🛠️ Tecnologias
 
-- **Frontend**: HTML5, CSS3, JavaScript (Vue.js ou React)  
-- **Backend**: Node.js (Express) ou Python (Flask/Django)  
-- **Empacotamento**: Docker (opcional)  
+- **Frontend**: HTML5, CSS3, JavaScript ,Tailwind 
 
 
