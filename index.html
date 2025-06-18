@@ -26,11 +26,21 @@
         #historico-senhas {
             display: flex;
             justify-content: center;
-            gap: 2rem;
-            flex-wrap: nowrap;
+            gap: 1rem;
+            flex-wrap: wrap;
             padding: 0;
             margin-top: 1rem;
             list-style: none;
+        }
+        #historico-senhas li {
+            font-size: 4rem;
+            font-weight: bold;
+            color: white;
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            min-width: 100px;
+            text-align: center;
         }
         /* Estilo para os carrosséis */
         .carrossel-container {
@@ -160,7 +170,7 @@
             <div class="p-6 md:p-12">
                 <h2 class="text-lg md:text-xl font-semibold text-white text-center">Últimos Pedidos Chamados</h2>
                 <ul id="historico-senhas">
-                    <li class="text-white text-xl font-semibold">Nenhum pedido chamado ainda.</li>
+                    
                 </ul>
             </div>
         </div>
@@ -243,7 +253,7 @@
 
         new Glide('.glide-direita', {
             type: 'carousel',
-            autoplay: 30000, // 30 segundos
+            autoplay: 15000, // 150 segundos
             hoverpause: false,
             perView: 1,
             animationDuration: 1000
@@ -413,7 +423,7 @@
             if (ultimasSenhas[0] !== senha) {
                 ultimasSenhas.unshift(senha);
             }
-            if (ultimasSenhas.length > 3) {
+            if (ultimasSenhas.length > 5) {
                 ultimasSenhas.pop();
             }
             atualizarHistoricoVisual();
@@ -424,14 +434,17 @@
             if (ultimasSenhas.length === 0) {
                 const li = document.createElement('li');
                 li.textContent = 'Nenhum pedido chamado ainda.';
-                li.className = 'text-white text-xl font-semibold';
+                li.className = 'text-white text-3xl font-semibold'; // Tamanho ajustado para 3xl
                 historicoSenhas.appendChild(li);
                 return;
             }
-            ultimasSenhas.forEach((senha) => {
+            
+            // Mostrar até 5 senhas
+            const senhasParaMostrar = ultimasSenhas.slice(0, 5);
+            senhasParaMostrar.forEach((senha) => {
                 const li = document.createElement('li');
                 li.textContent = senha;
-                li.className = 'text-6xl font-bold text-white select-none';
+                li.className = 'text-6xl font-bold text-white select-none bg-opacity-10 bg-white rounded-lg px-4 py-2';
                 historicoSenhas.appendChild(li);
             });
         }
