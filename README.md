@@ -25,10 +25,7 @@ O **Chamador de Senhas** permite:
 3. **Painel de Exibição**  
    - Tela em tempo real mostrando a senha atual.  
    - Modo “espera” quando não há chamadas ativas.  
-4. **Histórico**  
-   - Registro de todas as senhas chamadas e horários.  
-   - Exportação em CSV.  
-5. **Personalização**  
+4. **Personalização**  
    - Temas de cores e fontes.  
    - Sons e mensagens configuráveis.  
 
