@@ -262,4 +262,4 @@ Para dúvidas ou problemas:
 
 ---
 
-**Desenvolvido com ❤️ para o SESC**
+**Desenvolvido por @ALISSONCOQUEIRO com ❤️**
