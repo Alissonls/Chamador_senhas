@@ -240,16 +240,16 @@ Contribuições são bem-vindas! Para contribuir:
 
 Este projeto está sob a licença MIT. Veja o arquivo `LICENSE` para mais detalhes.
 
-## 👥 Autores
+## 👥 Autor
 
-- **SESC** - Desenvolvimento inicial
-- **Comunidade** - Melhorias e contribuições
+- **Alisson Luiz Siqueira Coquieiro** - Desenvolvimento inicial
+- **Alisson Luiz Siqueira Coquieiro** - Melhorias e contribuições
 
 ## 📞 Suporte
 
 Para dúvidas ou problemas:
 
-- 📧 Email: suporte@sesc.com.br
+- 📧 Email: alissonls@gmail.com    
 - 🐛 Issues: [GitHub Issues](https://github.com/seu-usuario/Chamador_senhas/issues)
 - 📖 Documentação: [docs/manual.md](docs/manual.md)
 
