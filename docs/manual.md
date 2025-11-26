@@ -1,6 +1,6 @@
 # 📘 Manual do Usuário - Chamador de Senhas
 
-> Guia completo para usar o sistema de chamada de pedidos do SESC
+> Guia completo para usar o sistema de chamada de pedidos 
 
 ## 🎯 Primeiros Passos
 
