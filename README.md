@@ -1,4 +1,4 @@
-# 🎯 Chamador de Senhas Premium - SESC
+# 🎯 Chamador de Senhas 
 
 Sistema web moderno e responsivo para gerenciamento de fila de atendimento por senhas/pedidos.
 
