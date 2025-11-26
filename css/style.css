@@ -1,0 +1,383 @@
+/**
+ * Chamador de Senhas - Estilos Principais v2.2
+ * Sistema de chamada de pedidos com design moderno e responsivo
+ * Layout: Pedido grande à esquerda + Histórico em coluna à direita
+ */
+
+/* ==========================================================================
+   VARIÁVEIS CSS - Design System
+   ========================================================================== */
+:root {
+    /* Cores Primárias */
+    --color-primary: #0066cc;
+    --color-primary-dark: #0052a3;
+    --color-primary-light: #3385d6;
+    --color-secondary: #0052a3;
+    --color-accent: #dc2626;
+    --color-accent-dark: #b91c1c;
+    --color-success: #10b981;
+    --color-warning: #f59e0b;
+    --color-error: #ef4444;
+
+    /* Cores Neutras */
+    --color-white: #ffffff;
+    --color-gray-50: #f9fafb;
+    --color-gray-100: #f3f4f6;
+    --color-gray-200: #e5e7eb;
+    --color-gray-300: #d1d5db;
+    --color-gray-400: #9ca3af;
+    --color-gray-500: #6b7280;
+    --color-gray-600: #4b5563;
+    --color-gray-700: #374151;
+    --color-gray-800: #1f2937;
+    --color-gray-900: #111827;
+
+    /* Glass Effect - Glassmorphism Premium */
+    --glass-bg: rgba(255, 255, 255, 0.08);
+    --glass-bg-hover: rgba(255, 255, 255, 0.12);
+    --glass-border: rgba(255, 255, 255, 0.18);
+    --glass-blur: 12px;
+
+    /* Gradientes */
+    --gradient-primary: linear-gradient(135deg, #0066cc 0%, #0052a3 100%);
+    --gradient-accent: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+    --gradient-success: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    --gradient-glow: radial-gradient(circle at center, rgba(0, 102, 204, 0.3) 0%, transparent 70%);
+
+    /* Sombras */
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+    --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+    --shadow-glow: 0 0 20px rgba(0, 102, 204, 0.4), 0 0 40px rgba(0, 102, 204, 0.2);
+    --shadow-glow-accent: 0 0 20px rgba(220, 38, 38, 0.4), 0 0 40px rgba(220, 38, 38, 0.2);
+
+    /* Espaçamentos */
+    --spacing-xs: 0.25rem;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
+    --spacing-xl: 2rem;
+    --spacing-2xl: 3rem;
+
+    /* Bordas */
+    --radius-sm: 0.375rem;
+    --radius-md: 0.5rem;
+    --radius-lg: 0.75rem;
+    --radius-xl: 1rem;
+    --radius-2xl: 1.5rem;
+    --radius-full: 9999px;
+
+    /* Transições */
+    --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-normal: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-slow: 500ms cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: 600ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+    /* Z-index */
+    --z-base: 1;
+    --z-dropdown: 10;
+    --z-sticky: 20;
+    --z-fixed: 30;
+    --z-modal-backdrop: 40;
+    --z-modal: 50;
+    --z-popover: 60;
+    --z-tooltip: 70;
+}
+
+/* ==========================================================================
+   RESET E CONFIGURAÇÕES GLOBAIS
+   ========================================================================== */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+        Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background-image: url('../img/funco_ondas.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* ==========================================================================
+   INPUT OCULTO - Captura de teclado
+   ========================================================================== */
+.hidden-input {
+    position: absolute;
+    width: 0;
+    height: 0;
+    opacity: 0;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+/* ==========================================================================
+   DISPLAY DE SENHA - Números gigantes para longa distância
+   ========================================================================== */
+#senha-atual {
+    font-size: 10rem;
+    /* 160px - Mobile */
+    line-height: 1.1;
+    text-shadow: 0 0 40px rgba(255, 255, 255, 0.5),
+        0 0 20px rgba(255, 255, 255, 0.3);
+    letter-spacing: 0.05em;
+}
+
+@media (min-width: 640px) {
+    #senha-atual {
+        font-size: 12rem;
+        /* 192px - Tablet */
+    }
+}
+
+@media (min-width: 768px) {
+    #senha-atual {
+        font-size: 14rem;
+        /* 224px - Desktop */
+    }
+}
+
+@media (min-width: 1024px) {
+    #senha-atual {
+        font-size: 15rem;
+        /* 240px - Desktop grande */
+    }
+}
+
+/* ==========================================================================
+   HISTÓRICO DE SENHAS - Layout em Coluna Vertical (Lateral Direita)
+   ========================================================================== */
+#historico-senhas {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+#historico-senhas li {
+    font-size: 3rem;
+    font-weight: bold;
+    color: var(--color-white);
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border: 1px solid var(--glass-border);
+    padding: 1rem;
+    border-radius: var(--radius-lg);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    transition: all var(--transition-normal);
+}
+
+/* Efeito de brilho ao hover */
+#historico-senhas li::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left var(--transition-slow);
+}
+
+#historico-senhas li:hover {
+    transform: scale(1.05);
+    box-shadow: var(--shadow-xl), var(--shadow-glow);
+    background: var(--glass-bg-hover);
+    border-color: rgba(0, 102, 204, 0.4);
+}
+
+#historico-senhas li:hover::before {
+    left: 100%;
+}
+
+/* Responsividade do histórico */
+@media (max-width: 1023px) {
+    #historico-senhas {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.5rem;
+    }
+
+    #historico-senhas li {
+        font-size: 2.5rem;
+        padding: 0.75rem 1rem;
+    }
+}
+
+@media (max-width: 640px) {
+    #historico-senhas li {
+        font-size: 2rem;
+        padding: 0.5rem 0.75rem;
+    }
+}
+
+/* ==========================================================================
+   ANIMAÇÕES
+   ========================================================================== */
+@keyframes blink {
+
+    0%,
+    49% {
+        opacity: 1;
+    }
+
+    50%,
+    100% {
+        opacity: 0;
+    }
+}
+
+.animate-blink {
+    animation: blink 1s infinite;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fade-in {
+    animation: fadeIn var(--transition-normal) ease-out;
+}
+
+@keyframes slideInFromLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+.animate-pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes glowPulse {
+
+    0%,
+    100% {
+        box-shadow: 0 0 10px rgba(220, 38, 38, 0.3);
+    }
+
+    50% {
+        box-shadow: var(--shadow-glow-accent);
+    }
+}
+
+.animate-glow {
+    animation: glowPulse 2s ease-in-out infinite;
+}
+
+/* ==========================================================================
+   PAINEL DE CONTROLE
+   ========================================================================== */
+#control-panel {
+    transition: transform var(--transition-normal) cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Cursor piscante no preview */
+#cursor {
+    display: inline-block;
+    width: 2px;
+    height: 2.5rem;
+    background: var(--gradient-primary);
+    margin-left: 0.25rem;
+    vertical-align: middle;
+    box-shadow: 0 0 10px rgba(0, 102, 204, 0.5);
+}
+
+@media (min-width: 768px) {
+    #cursor {
+        height: 3rem;
+    }
+}
+
+/* ==========================================================================
+   UTILITÁRIOS E ACESSIBILIDADE
+   ========================================================================== */
+
+/* Suporte a modo de alto contraste */
+@media (prefers-contrast: high) {
+    :root {
+        --glass-bg: rgba(255, 255, 255, 0.15);
+        --glass-border: rgba(255, 255, 255, 0.3);
+    }
+
+    #historico-senhas li {
+        border: 2px solid var(--color-white);
+    }
+}
+
+/* Suporte a redução de movimento */
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+
+    .animate-blink,
+    .animate-pulse,
+    .animate-glow {
+        animation: none;
+    }
+}
+
+/* Estados de foco para acessibilidade */
+button:focus-visible,
+input:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}

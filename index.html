@@ -1,464 +1,214 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Chamador de Pedidos Premium</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Sistema de chamada de pedidos - SESC">
+    <meta name="keywords" content="chamador, senhas, pedidos, fila, atendimento">
+    <meta name="author" content="SESC">
+
+    <title>Chamador de Pedidos Premium - SESC</title>
+
+    <!-- TailwindCSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Adicionando o Glide.js para o carrossel -->
+
+    <!-- Glide.js - Biblioteca de Carrossel -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Glide.js/3.5.0/css/glide.core.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Glide.js/3.5.0/css/glide.theme.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-    <style type="text/css">
-        body {
-            background-image: url('img/funco_ondas.png');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-        }
-        .hidden-input {
-            position: absolute;
-            width: 0;
-            height: 0;
-            opacity: 0;
-            overflow: hidden;
-        }
-        #historico-senhas {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            flex-wrap: wrap;
-            padding: 0;
-            margin-top: 1rem;
-            list-style: none;
-        }
-        #historico-senhas li {
-            font-size: 4rem;
-            font-weight: bold;
-            color: white;
-            background-color: rgba(255, 255, 255, 0.1);
-            padding: 0.5rem 1rem;
-            border-radius: 0.5rem;
-            min-width: 100px;
-            text-align: center;
-        }
-        /* Estilo para os carrosséis */
-        .carrossel-container {
-            position: fixed;
-            top: 0;
-            bottom: 0;
-            width: 300px;
-            z-index: 40;
-            overflow: hidden;
-        }
-        .carrossel-esquerda {
-            left: 0;
-        }
-        .carrossel-direita {
-            right: 0;
-        }
-        .glide__slide {
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-color: #000;
-        }
-        .glide__slide img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        /* Ajuste para o conteúdo principal com os carrosséis */
-        @media (min-width: 1024px) {
-            main {
-                margin-left: 300px;
-                margin-right: 300px;
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet" />
+
+    <!-- Estilos Personalizados -->
+    <link rel="stylesheet" href="css/style.css">
+
+    <!-- Configuração do TailwindCSS -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#0066cc',
+                        secondary: '#0052a3',
+                        accent: '#dc2626',
+                        success: '#10b981',
+                        warning: '#f59e0b',
+                        error: '#ef4444'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif']
+                    }
+                }
             }
         }
-        /* Estilo para os bullets de navegação */
-        .glide__bullets {
-            position: absolute;
-            bottom: 20px;
-            left: 0;
-            right: 0;
-            display: flex;
-            justify-content: center;
-            gap: 8px;
-            z-index: 2;
-        }
-        .glide__bullet {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.5);
-            border: none;
-            cursor: pointer;
-        }
-        .glide__bullet--active {
-            background: white;
-        }
-    </style>
+    </script>
 </head>
-<body class="font-sans bg-gray-50 min-h-screen flex flex-col">
-    <!-- Carrossel na lateral esquerda -->
-    <div class="carrossel-container carrossel-esquerda hidden lg:block">
-        <div class="glide glide-esquerda">
-            <div class="glide__track" data-glide-el="track">
-                <ul class="glide__slides">
-                    <!-- Adicione suas imagens aqui -->
-                    <li class="glide__slide"><img src="img/peixes.png.jpg" alt="Propaganda 1"></li>
-                    <li class="glide__slide"><img src="img/entrada.png" alt="Propaganda 2"></li>
-                    <li class="glide__slide"><img src="img/frente.png.jpg" alt="Propaganda 3"></li>
-                </ul>
-            </div>
-            <div class="glide__bullets" data-glide-el="controls[nav]">
-                <button class="glide__bullet" data-glide-dir="=0"></button>
-                <button class="glide__bullet" data-glide-dir="=1"></button>
-                <button class="glide__bullet" data-glide-dir="=2"></button>
-            </div>
-        </div>
-    </div>
 
-    <!-- Carrossel na lateral direita -->
-    <div class="carrossel-container carrossel-direita hidden lg:block">
-        <div class="glide glide-direita">
-            <div class="glide__track" data-glide-el="track">
-                <ul class="glide__slides">
-                    <!-- Adicione suas imagens aqui -->
-                    <li class="glide__slide"><img src="img/frente.png.jpg " alt="Propaganda 4"></li>
-                    <li class="glide__slide"><img src="img/peixes.png.jpg" alt="Propaganda 5"></li>
-                    <li class="glide__slide"><img src="img/entrada.png" alt="Propaganda 6"></li>
-                </ul>
-            </div>
-            <div class="glide__bullets" data-glide-el="controls[nav]">
-                <button class="glide__bullet" data-glide-dir="=0"></button>
-                <button class="glide__bullet" data-glide-dir="=1"></button>
-                <button class="glide__bullet" data-glide-dir="=2"></button>
-            </div>
-        </div>
-    </div>
+<body class="min-h-screen flex flex-col">
+    <!-- Input oculto para captura de teclado -->
+    <input type="text" id="hidden-input" class="hidden-input" autocomplete="off" aria-hidden="true" tabindex="-1">
 
-    <!-- Input oculto para capturar teclado -->
-    <input type="text" id="hidden-input" class="hidden-input" autocomplete="off" />
-    
     <!-- Header -->
-    <header class="flex justify-center p-4">
-        <img src="img/logosesc_branco.png" alt="Logo SESC" class="h-16 w-auto" style="height: 100px;" />
+    <header class="bg-white bg-opacity-10 backdrop-blur-md shadow-lg" role="banner">
+        <div class="container mx-auto px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <img src="img/logosesc_branco.png" alt="Logo SESC" class="h-12 md:h-16"
+                    onerror="this.style.display='none'">
+                <h1 class="text-white text-xl md:text-2xl font-bold">
+                    Comedoria
+                </h1>
+            </div>
+            <div class="text-white text-sm md:text-base">
+                <span id="data-hora" class="font-medium"></span>
+            </div>
+        </div>
     </header>
 
     <!-- Painel principal de exibição -->
-    <main class="flex-1 flex flex-col items-center justify-center p-4 md:p-8">
-        <div class="w-full max-w-5xl bg-white bg-opacity-5 backdrop-blur-md rounded-2xl shadow-xl overflow-hidden">
+    <main class="flex-1 flex flex-col items-center justify-center p-4 md:p-8" role="main">
+        <div class="w-full max-w-7xl bg-white bg-opacity-5 backdrop-blur-md rounded-2xl shadow-xl overflow-hidden">
 
             <!-- Cabeçalho -->
             <div class="bg-primary bg-opacity-5 py-4 px-6">
-                <h1 class="text-white text-xl md:text-2xl font-bold text-center">Sistema de Chamada de Pedidos</h1>
+                <h2 class="text-white text-xl md:text-2xl font-bold text-center">
+                    Sistema de Chamada de Pedidos
+                </h2>
             </div>
 
-            <!-- Display do pedido -->
-            <div class="p-6 md:p-12">
-                <div class="text-center mb-2">
-                    <span id="tipo-senha" class="text-white text-2xl md:text-4xl font-semibold">PRÓXIMO PEDIDO</span>
-                </div>
-                <div id="senha-atual" class="text-12xl md:text-9xl font-bold text-center py-8 md:py-12 text-white">
-                    ---
-                </div>
-            </div>
+            <!-- Layout em Grid: Pedido Atual (esquerda) + Histórico (direita) -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-0">
 
-            <!-- Últimos pedidos chamados -->
-            <div class="p-6 md:p-12">
-                <h2 class="text-lg md:text-xl font-semibold text-white text-center">Últimos Pedidos Chamados</h2>
-                <ul id="historico-senhas">
-                    
-                </ul>
+                <!-- Display do pedido atual - 2 colunas -->
+                <div class="lg:col-span-2 p-6 md:p-12">
+                    <div class="text-center mb-2">
+                        <span id="tipo-senha" class="text-white text-2xl md:text-4xl font-semibold" aria-live="polite">
+                            PRÓXIMO PEDIDO
+                        </span>
+                    </div>
+                    <div id="senha-atual" class="font-bold text-center py-8 md:py-12 text-white" role="status"
+                        aria-live="assertive" aria-atomic="true">
+                        ---
+                    </div>
+                </div>
+
+                <!-- Últimos pedidos chamados - 1 coluna lateral direita -->
+                <div class="lg:col-span-1 p-6 md:p-8 lg:border-l border-white border-opacity-10 bg-white bg-opacity-5">
+                    <h3 class="text-lg md:text-xl font-semibold text-white text-center mb-6">
+                        Últimos Pedidos
+                    </h3>
+                    <ul id="historico-senhas" role="list" aria-live="polite" aria-label="Histórico de pedidos chamados"
+                        class="flex flex-col gap-3">
+                        <!-- Preenchido dinamicamente -->
+                    </ul>
+                </div>
+
             </div>
         </div>
     </main>
 
     <!-- Painel de controle flutuante -->
-    <div id="control-panel" class="fixed bottom-0 left-0 right-0 bg-white shadow-2xl rounded-t-3xl p-4 md:p-6 transform translate-y-full transition-transform duration-300">
+    <aside id="control-panel"
+        class="fixed bottom-0 left-0 right-0 bg-white shadow-2xl rounded-t-3xl p-4 md:p-6 transform translate-y-full transition-transform duration-300"
+        role="complementary" aria-label="Painel de controle">
         <!-- Display do input -->
         <div class="flex justify-center items-center mb-4 h-12 md:h-16">
-            <div id="senha-preview" class="text-xl md:text-3xl font-mono font-bold flex items-center">
+            <div id="senha-preview" class="text-xl md:text-3xl font-mono font-bold flex items-center" role="status"
+                aria-live="polite">
                 <span id="preview-numero" class="text-dark"></span>
-                <span id="cursor" class="w-1 h-8 md:h-10 bg-primary ml-1 animate-blink"></span>
+                <span id="cursor" class="w-1 h-8 md:h-10 bg-primary ml-1 animate-blink" aria-hidden="true"></span>
             </div>
         </div>
-        
+
         <!-- Teclado virtual -->
         <div class="max-w-md mx-auto">
-            <div class="grid grid-cols-3 gap-2">
-                <button onclick="adicionarDigito('1')" class="bg-gray-100 hover:bg-gray-200 font-bold py-3 md:py-4 px-2 md:px-4 rounded-lg text-lg md:text-xl transition-all">
+            <div class="grid grid-cols-3 gap-2" role="group" aria-label="Teclado numérico">
+                <button onclick="adicionarDigito('1')"
+                    class="bg-gray-100 hover:bg-gray-200 font-bold py-3 md:py-4 px-2 md:px-4 rounded-lg text-lg md:text-xl transition-all"
+                    aria-label="Número 1">
                     1
                 </button>
-                <button onclick="adicionarDigito('2')" class="bg-gray-100 hover:bg-gray-200 font-bold py-3 md:py-4 px-2 md:px-4 rounded-lg text-lg md:text-xl transition-all">
+                <button onclick="adicionarDigito('2')"
+                    class="bg-gray-100 hover:bg-gray-200 font-bold py-3 md:py-4 px-2 md:px-4 rounded-lg text-lg md:text-xl transition-all"
+                    aria-label="Número 2">
                     2
                 </button>
-                <button onclick="adicionarDigito('3')" class="bg-gray-100 hover:bg-gray-200 font-bold py-3 md:py-4 px-2 md:px-4 rounded-lg text-lg md:text-xl transition-all">
+                <button onclick="adicionarDigito('3')"
+                    class="bg-gray-100 hover:bg-gray-200 font-bold py-3 md:py-4 px-2 md:px-4 rounded-lg text-lg md:text-xl transition-all"
+                    aria-label="Número 3">
                     3
                 </button>
-                <button onclick="adicionarDigito('4')" class="bg-gray-100 hover:bg-gray-200 font-bold py-3 md:py-4 px-2 md:px-4 rounded-lg text-lg md:text-xl transition-all">
+                <button onclick="adicionarDigito('4')"
+                    class="bg-gray-100 hover:bg-gray-200 font-bold py-3 md:py-4 px-2 md:px-4 rounded-lg text-lg md:text-xl transition-all"
+                    aria-label="Número 4">
                     4
                 </button>
-                <button onclick="adicionarDigito('5')" class="bg-gray-100 hover:bg-gray-200 font-bold py-3 md:py-4 px-2 md:px-4 rounded-lg text-lg md:text-xl transition-all">
+                <button onclick="adicionarDigito('5')"
+                    class="bg-gray-100 hover:bg-gray-200 font-bold py-3 md:py-4 px-2 md:px-4 rounded-lg text-lg md:text-xl transition-all"
+                    aria-label="Número 5">
                     5
                 </button>
-                <button onclick="adicionarDigito('6')" class="bg-gray-100 hover:bg-gray-200 font-bold py-3 md:py-4 px-2 md:px-4 rounded-lg text-lg md:text-xl transition-all">
+                <button onclick="adicionarDigito('6')"
+                    class="bg-gray-100 hover:bg-gray-200 font-bold py-3 md:py-4 px-2 md:px-4 rounded-lg text-lg md:text-xl transition-all"
+                    aria-label="Número 6">
                     6
                 </button>
-                <button onclick="adicionarDigito('7')" class="bg-gray-100 hover:bg-gray-200 font-bold py-3 md:py-4 px-2 md:px-4 rounded-lg text-lg md:text-xl transition-all">
+                <button onclick="adicionarDigito('7')"
+                    class="bg-gray-100 hover:bg-gray-200 font-bold py-3 md:py-4 px-2 md:px-4 rounded-lg text-lg md:text-xl transition-all"
+                    aria-label="Número 7">
                     7
                 </button>
-                <button onclick="adicionarDigito('8')" class="bg-gray-100 hover:bg-gray-200 font-bold py-3 md:py-4 px-2 md:px-4 rounded-lg text-lg md:text-xl transition-all">
+                <button onclick="adicionarDigito('8')"
+                    class="bg-gray-100 hover:bg-gray-200 font-bold py-3 md:py-4 px-2 md:px-4 rounded-lg text-lg md:text-xl transition-all"
+                    aria-label="Número 8">
                     8
                 </button>
-                <button onclick="adicionarDigito('9')" class="bg-gray-100 hover:bg-gray-200 font-bold py-3 md:py-4 px-2 md:px-4 rounded-lg text-lg md:text-xl transition-all">
+                <button onclick="adicionarDigito('9')"
+                    class="bg-gray-100 hover:bg-gray-200 font-bold py-3 md:py-4 px-2 md:px-4 rounded-lg text-lg md:text-xl transition-all"
+                    aria-label="Número 9">
                     9
                 </button>
-                <button onclick="limpar()" class="bg-gray-200 hover:bg-gray-300 font-bold py-3 md:py-4 px-2 md:px-4 rounded-lg text-lg md:text-xl transition-all">
+                <button onclick="limpar()"
+                    class="bg-gray-200 hover:bg-gray-300 font-bold py-3 md:py-4 px-2 md:px-4 rounded-lg text-lg md:text-xl transition-all"
+                    aria-label="Limpar">
                     Limpar
                 </button>
-                <button onclick="adicionarDigito('0')" class="bg-gray-100 hover:bg-gray-200 font-bold py-3 md:py-4 px-2 md:px-4 rounded-lg text-lg md:text-xl transition-all">
+                <button onclick="adicionarDigito('0')"
+                    class="bg-gray-100 hover:bg-gray-200 font-bold py-3 md:py-4 px-2 md:px-4 rounded-lg text-lg md:text-xl transition-all"
+                    aria-label="Número 0">
                     0
                 </button>
-                <button onclick="chamarSenha()" class="bg-accent hover:bg-red-600 text-white font-bold py-3 md:py-4 px-2 md:px-4 rounded-lg text-lg md:text-xl transition-all">
+                <button onclick="chamarSenha()"
+                    class="bg-accent hover:bg-red-600 text-white font-bold py-3 md:py-4 px-2 md:px-4 rounded-lg text-lg md:text-xl transition-all"
+                    aria-label="Chamar pedido">
                     Chamar
                 </button>
             </div>
         </div>
-    </div>
+    </aside>
 
-    <!-- Botão para mostrar/ocultar painel de controle -->
-    <button id="toggle-panel" onclick="toggleControlPanel()" class="fixed bottom-4 right-4 bg-primary text-white p-3 rounded-full shadow-lg z-50 hover:bg-secondary transition-all">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <!-- Botão para mostrar / ocultar painel de controle -->
+    <button id="toggle-panel" onclick="toggleControlPanel()"
+        class="fixed bottom-4 right-4 bg-primary text-white p-3 rounded-full shadow-lg z-50 hover:bg-secondary transition-all"
+        aria-label="Abrir painel de controle" aria-expanded="false">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+            aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
         </svg>
     </button>
 
     <!-- Feedback flutuante -->
-    <div id="feedback" class="fixed top-4 left-1/2 transform -translate-x-1/2 px-6 py-3 rounded-lg shadow-lg font-semibold opacity-0 transition-opacity duration-300"></div>
+    <div id="feedback"
+        class="fixed top-4 left-1/2 transform -translate-x-1/2 px-6 py-3 rounded-lg shadow-lg font-semibold opacity-0 transition-opacity duration-300"
+        role="alert" aria-live="assertive"></div>
 
-    <!-- Script do Glide.js -->
+    <!-- Scripts -->
+    <!-- Glide.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Glide.js/3.5.0/glide.min.js"></script>
-    <script>
-        // Inicializa os carrosséis com 30 segundos de intervalo
-        new Glide('.glide-esquerda', {
-            type: 'carousel',
-            autoplay: 30000, // 30 segundos
-            hoverpause: false,
-            perView: 1,
-            animationDuration: 1000
-        }).mount();
 
-        new Glide('.glide-direita', {
-            type: 'carousel',
-            autoplay: 15000, // 150 segundos
-            hoverpause: false,
-            perView: 1,
-            animationDuration: 1000
-        }).mount();
-
-        // Estado da aplicação
-        let senhaAtual = '';
-        const ultimasSenhas = [];
-        const hiddenInput = document.getElementById('hidden-input');
-        const displaySenhaAtual = document.getElementById('senha-atual');
-        const displayTipoSenha = document.getElementById('tipo-senha');
-        const previewNumero = document.getElementById('preview-numero');
-        const cursor = document.getElementById('cursor');
-        const feedback = document.getElementById('feedback');
-        const controlPanel = document.getElementById('control-panel');
-        const togglePanelBtn = document.getElementById('toggle-panel');
-        const historicoSenhas = document.getElementById('historico-senhas');
-
-        // Cria contexto audio para o som de chamada
-        let audioCtx;
-        function playChamadaSound() {
-            if (!audioCtx) {
-                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            }
-
-            const osc1 = audioCtx.createOscillator();
-            const osc2 = audioCtx.createOscillator();
-            const gainNode = audioCtx.createGain();
-
-            osc1.type = 'sine';
-            osc1.frequency.setValueAtTime(800, audioCtx.currentTime);
-            osc2.type = 'triangle';
-            osc2.frequency.setValueAtTime(1200, audioCtx.currentTime);
-
-            osc1.connect(gainNode);
-            osc2.connect(gainNode);
-            gainNode.connect(audioCtx.destination);
-
-            gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
-            gainNode.gain.linearRampToValueAtTime(0.2, audioCtx.currentTime + 0.01);
-            gainNode.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.3);
-
-            osc1.start(audioCtx.currentTime);
-            osc2.start(audioCtx.currentTime);
-
-            osc1.stop(audioCtx.currentTime + 0.3);
-            osc2.stop(audioCtx.currentTime + 0.3);
-        }
-
-        // Configuração inicial
-        document.addEventListener('DOMContentLoaded', () => {
-            hiddenInput.focus();
-            document.addEventListener('keydown', handleKeyDown);
-            cursor.classList.remove('opacity-0');
-        });
-
-        // Manipulador de teclado
-        function handleKeyDown(e) {
-            cursor.classList.remove('opacity-0');
-            
-            if (e.key >= '0' && e.key <= '9') {
-                adicionarDigito(e.key);
-                e.preventDefault();
-                return;
-            }
-            
-            if (e.key === 'Backspace') {
-                senhaAtual = senhaAtual.slice(0, -1);
-                atualizarPreview();
-                e.preventDefault();
-                return;
-            }
-            
-            if (e.key === 'Enter') {
-                chamarSenha();
-                e.preventDefault();
-                return;
-            }
-            
-            if (e.key === 'Escape') {
-                limpar();
-                e.preventDefault();
-                return;
-            }
-            
-            if (e.key === ' ') {
-                toggleControlPanel();
-                e.preventDefault();
-                return;
-            }
-        }
-
-        // Alterna visibilidade do painel de controle
-        function toggleControlPanel() {
-            const isVisible = controlPanel.classList.contains('translate-y-0');
-            
-            if (isVisible) {
-                controlPanel.classList.remove('translate-y-0');
-                controlPanel.classList.add('translate-y-full');
-                togglePanelBtn.innerHTML = `
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                    </svg>
-                `;
-            } else {
-                controlPanel.classList.remove('translate-y-full');
-                controlPanel.classList.add('translate-y-0');
-                togglePanelBtn.innerHTML = `
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
-                    </svg>
-                `;
-            }
-            
-            hiddenInput.focus();
-        }
-
-        // Funções de controle
-        function adicionarDigito(digito) {
-            if (senhaAtual.length >= 4) return;
-            senhaAtual += digito;
-            atualizarPreview();
-        }
-
-        function limpar() {
-            senhaAtual = '';
-            atualizarPreview();
-            cursor.classList.remove('opacity-0');
-            hiddenInput.focus();
-        }
-
-        function atualizarPreview() {
-            previewNumero.textContent = senhaAtual;
-            cursor.classList.remove('opacity-0');
-        }
-
-        function chamarSenha() {
-            const numero = parseInt(senhaAtual);
-            
-            if (senhaAtual === '' || isNaN(numero) || numero < 1 || numero > 1000) {
-                mostrarFeedback('Número inválido! Digite um número entre 1 e 1000', false);
-                return;
-            }
-            
-            playChamadaSound();
-
-            displaySenhaAtual.textContent = senhaAtual;
-            displaySenhaAtual.classList.remove('text-gray-400');
-            displaySenhaAtual.classList.add('text-accent');
-
-            displayTipoSenha.textContent = 'PEDIDO';
-            displayTipoSenha.className = 'text-white text-2xl md:text-4xl font-semibold';
-
-            adicionarNoHistorico(senhaAtual);
-
-            mostrarFeedback(`Pedido ${senhaAtual} chamado com sucesso!`, true);
-
-            setTimeout(() => {
-                limpar();
-            }, 1500);
-        }
-
-        function adicionarNoHistorico(senha) {
-            if (ultimasSenhas.length === 0) {
-                historicoSenhas.innerHTML = '';
-            }
-            if (ultimasSenhas[0] !== senha) {
-                ultimasSenhas.unshift(senha);
-            }
-            if (ultimasSenhas.length > 5) {
-                ultimasSenhas.pop();
-            }
-            atualizarHistoricoVisual();
-        }
-
-        function atualizarHistoricoVisual() {
-            historicoSenhas.innerHTML = '';
-            if (ultimasSenhas.length === 0) {
-                const li = document.createElement('li');
-                li.textContent = 'Nenhum pedido chamado ainda.';
-                li.className = 'text-white text-3xl font-semibold'; // Tamanho ajustado para 3xl
-                historicoSenhas.appendChild(li);
-                return;
-            }
-            
-            // Mostrar até 5 senhas
-            const senhasParaMostrar = ultimasSenhas.slice(0, 5);
-            senhasParaMostrar.forEach((senha) => {
-                const li = document.createElement('li');
-                li.textContent = senha;
-                li.className = 'text-6xl font-bold text-white select-none bg-opacity-10 bg-white rounded-lg px-4 py-2';
-                historicoSenhas.appendChild(li);
-            });
-        }
-
-        function mostrarFeedback(mensagem, sucesso) {
-            feedback.textContent = mensagem;
-            feedback.className = `fixed top-4 left-1/2 transform -translate-x-1/2 px-6 py-3 rounded-lg shadow-lg font-semibold opacity-0 transition-opacity duration-300 ${sucesso ? 'bg-green-500' : 'bg-red-500'} text-white`;
-            setTimeout(() => {
-                feedback.classList.remove('opacity-0');
-                setTimeout(() => {
-                    feedback.classList.add('opacity-0');
-                }, 2500);
-            }, 10);
-        }
-    </script>
+    <!-- Aplicação Principal -->
+    <script src="js/app.js"></script>
 </body>
+
 </html>
